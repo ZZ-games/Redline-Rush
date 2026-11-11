@@ -1,0 +1,14 @@
+{
+  "name": "redline-rush",
+  "private": true,
+  "type": "module",
+  "description": "Neon 3D arcade racer. No build step: open index.html through any static server.",
+  "scripts": {
+    "serve": "python3 -m http.server 8000",
+    "test": "node test/smoke.mjs",
+    "test:update": "node test/smoke.mjs --update"
+  },
+  "devDependencies": {
+    "puppeteer-core": "^23.0.0"
+  }
+}

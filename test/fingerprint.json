@@ -1,0 +1,29 @@
+{
+  "heat": {
+    "state": "race",
+    "dist": 3294.82,
+    "score": 7264.76,
+    "nearMiss": 8,
+    "crashes": 2,
+    "gates": 2,
+    "maxMult": 5
+  },
+  "drift": {
+    "state": "race",
+    "dist": 793.93,
+    "score": 705.92,
+    "nearMiss": 0,
+    "crashes": 0,
+    "gates": 0,
+    "maxMult": 1
+  },
+  "free": {
+    "state": "race",
+    "dist": 1215.74,
+    "score": 1606.3,
+    "nearMiss": 0,
+    "crashes": 0,
+    "gates": 0,
+    "maxMult": 1
+  }
+}

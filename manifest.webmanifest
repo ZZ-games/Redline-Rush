@@ -1,0 +1,11 @@
+{
+  "name": "Redline Rush",
+  "short_name": "Redline Rush",
+  "start_url": "./",
+  "scope": "./",
+  "display": "fullscreen",
+  "orientation": "landscape",
+  "background_color": "#07060c",
+  "theme_color": "#07060c",
+  "icons": [{ "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" }]
+}

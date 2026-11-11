@@ -1,1 +1,141 @@
-blank
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Redline Rush">
+<meta name="theme-color" content="#07060c">
+<title>Redline Rush</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="icon.svg">
+<link rel="stylesheet" href="css/fonts.css">
+<link rel="stylesheet" href="css/style.css">
+<script type="importmap">{ "imports": { "three": "./lib/three/three.module.js", "three/addons/": "./lib/three/addons/" } }</script>
+</head>
+<body>
+<div id="app">
+  <canvas id="gl"></canvas>
+  <div id="fx-flash"></div>
+  <div id="fx-edge"></div>
+
+  <div id="hud" hidden>
+    <div class="hud-tl">
+      <div class="lbl">Score</div>
+      <div id="h-score" class="score num">0</div>
+      <div id="h-chain" class="chain" style="opacity:0">
+        <span id="h-mult" class="mult num">x1</span>
+        <svg viewBox="0 0 26 26" aria-hidden="true"><circle cx="13" cy="13" r="10" stroke="rgba(255,255,255,.15)"></circle><circle id="h-ring" cx="13" cy="13" r="10" stroke="#ffc23d" stroke-dasharray="62.8" stroke-dashoffset="0"></circle></svg>
+        <span id="h-chainpts" class="pts num">+0</span>
+      </div>
+    </div>
+    <div class="hud-tc">
+      <div id="h-timer" class="timer num">60.0</div>
+      <div id="h-cp" class="cp">Next checkpoint 1.5 km</div>
+    </div>
+    <div class="hud-tr">
+      <div id="h-district" class="district">Neon City</div>
+      <div id="h-best" class="best">Best 0</div>
+      <div class="lvl"><span id="h-lvl">LV 1</span><div class="xpbar"><i id="h-xp"></i></div></div>
+      <div id="h-unlock" class="unlock"></div>
+      <button id="btn-pause" aria-label="Pause">II</button>
+    </div>
+    <div class="hud-br">
+      <div id="h-tier" class="tier"></div>
+      <div class="speedo">
+        <svg viewBox="0 0 210 128" aria-hidden="true">
+          <path d="M 12 120 A 100 100 0 0 1 198 64" fill="none" stroke="rgba(255,255,255,.12)" stroke-width="8" stroke-linecap="butt"></path>
+          <path id="h-arc" d="M 12 120 A 100 100 0 0 1 198 64" fill="none" stroke="#ff2d55" stroke-width="8" stroke-dasharray="260" stroke-dashoffset="260"></path>
+        </svg>
+        <div id="h-gear" class="gear num">1</div>
+        <div id="h-speed" class="speed num">0</div>
+        <div id="h-unit" class="unit">KM/H</div>
+      </div>
+      <div class="boost">
+        <div id="h-od" class="od" title="Overdrive charges"><b></b><b></b><b></b></div>
+        <div id="h-boostbar" class="boost-bar"><i id="h-boost"></i></div>
+      </div>
+    </div>
+    <div id="h-pops" class="pops"></div>
+    <div id="h-big" class="big"></div>
+    <div id="h-count" class="count"></div>
+    <div id="h-toasts"></div>
+    <div id="h-hint" class="hint"><kbd>W</kbd><kbd>A</kbd><kbd>S</kbd><kbd>D</kbd> drive &nbsp; <kbd>Shift</kbd> drift &nbsp; <kbd>Space</kbd> boost &nbsp; <kbd>C</kbd> camera &nbsp; <kbd>Esc</kbd> pause</div>
+    <div id="touch" hidden>
+      <div id="t-left" class="tbtn" data-k="left"><svg viewBox="0 0 24 24"><path d="M15 4 7 12l8 8z"/></svg></div>
+      <div id="t-right" class="tbtn" data-k="right"><svg viewBox="0 0 24 24"><path d="m9 4 8 8-8 8z"/></svg></div>
+      <div id="t-boost" class="tbtn" data-k="boost">BOOST</div>
+      <div id="t-drift" class="tbtn" data-k="drift">DRIFT</div>
+      <div id="t-brake" class="tbtn" data-k="brake">BRAKE</div>
+    </div>
+  </div>
+
+  <div id="scr-boot" class="screen">
+    <div>
+      <div class="logo"><span class="a">Redline</span><span class="b">Rush</span><span class="stripe"></span></div>
+      <div class="tag">Five districts. One redline.</div>
+      <div id="boot-load"><div class="loadbar"><i id="boot-bar"></i></div><div class="tag" id="boot-msg" style="margin-top:12px;font-size:12px">Building the city</div></div>
+      <div id="boot-press" class="press" hidden>Press any key or tap</div>
+    </div>
+  </div>
+
+  <div id="scr-menu" class="screen shade-l" hidden>
+    <div class="menu-wrap">
+      <div class="logo"><span class="a">Redline</span><span class="b">Rush</span><span class="stripe"></span></div>
+      <nav class="nav" id="menu-nav">
+        <button data-go="modes">Race <small>Pick a mode</small></button>
+        <button data-go="garage">Garage <small>Cars + upgrades</small></button>
+        <button data-go="career">Career <small>Stats + badges</small></button>
+        <button data-go="settings">Settings</button>
+      </nav>
+      <div class="menu-hint" id="menu-hint"></div>
+    </div>
+    <div class="driver" id="driver-card"></div>
+  </div>
+
+  <div id="scr-modes" class="screen shade-full" hidden>
+    <div class="panel-head"><h2>Choose a run</h2><button class="back" data-back>Back</button></div>
+    <div class="modes" id="mode-list"></div>
+  </div>
+
+  <div id="scr-garage" class="screen" hidden>
+    <div class="panel-head"><h2>Garage</h2><div style="display:flex;gap:14px;align-items:center"><span class="cash-pill num" id="g-cash">$0</span><button class="back" data-back>Back</button></div></div>
+    <div class="carlist" id="g-list"></div>
+    <div></div>
+    <div class="carinfo" id="g-info"></div>
+  </div>
+
+  <div id="scr-career" class="screen shade-full" hidden>
+    <div class="panel-head"><h2>Career</h2><button class="back" data-back>Back</button></div>
+    <div class="career" id="career-body"></div>
+  </div>
+
+  <div id="scr-settings" class="modal shade-full" hidden>
+    <div class="card" id="settings-body"></div>
+  </div>
+
+  <div id="scr-pause" class="modal shade-full" hidden>
+    <div class="card">
+      <h3>Paused</h3>
+      <div class="sub" id="pause-sub"></div>
+      <div class="pause-nav">
+        <button class="btn" data-p="resume">Resume</button>
+        <button class="btn ghost" data-p="restart">Restart run</button>
+        <button class="btn ghost" data-p="finish" id="p-finish">Finish run</button>
+        <button class="btn ghost" data-p="settings">Settings</button>
+        <button class="btn ghost" data-p="quit">Quit to menu</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="scr-results" class="screen shade-full" hidden><div class="res" id="res-body"></div></div>
+  <div id="scr-crate" class="crate" hidden></div>
+</div>
+
+<script type="module" src="js/main.js"></script>
+<script>if ('serviceWorker' in navigator && location.protocol === 'https:') navigator.serviceWorker.register('sw.js').catch(() => {});</script>
+</body>
+</html>
